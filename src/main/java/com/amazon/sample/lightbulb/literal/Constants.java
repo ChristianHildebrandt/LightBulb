@@ -26,7 +26,7 @@ public class Constants {
 
         public static class NamedQueries {
 
-            public static String GET_ALL_USERS = "SELECT u FROM User u";
+            public static String GET_ALL_SWITCHES = "SELECT s FROM LightSwitch s";
         }
 
     }

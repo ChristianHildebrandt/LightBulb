@@ -13,12 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.amazon.sample.lightbulb.jpa.dao.impl;
+package com.amazon.sample.lightbulb.jpa.dao;
+
+import com.amazon.sample.lightbulb.exception.DatabaseException;
+import com.amazon.sample.lightbulb.model.LightSwitch;
+import java.util.List;
 
 /**
  *
  * @author Christian Hildebrandt
  */
-public class CredentialDao {
-    
+public interface ILightSwitchDao {
+
+    public void addSwitch(LightSwitch lightswitch) throws DatabaseException;
+
+    public List<LightSwitch> getAllLightSwitches() throws DatabaseException;
+
 }

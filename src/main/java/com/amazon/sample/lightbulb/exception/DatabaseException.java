@@ -13,12 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.amazon.sample.lightbulb.jpa.dao;
+package com.amazon.sample.lightbulb.exception;
 
 /**
  *
  * @author Christian Hildebrandt
  */
-public interface ICredentialDao {
-    
+public class DatabaseException extends Exception {
+
+    private final String message;
+
+    public DatabaseException(String message) {
+        this.message = message;
+    }
+
+    @Override
+    public String getMessage() {
+        return this.message;
+    }
+
 }
