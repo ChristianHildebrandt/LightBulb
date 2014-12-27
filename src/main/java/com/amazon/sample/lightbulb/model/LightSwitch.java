@@ -17,6 +17,7 @@ package com.amazon.sample.lightbulb.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -26,6 +27,9 @@ import javax.persistence.Id;
 import javax.persistence.Temporal;
 
 /**
+ * LightSwitch entity represents a switch to turn on/off a light bulb. It holds
+ * the state of the light bulb and the datetime off toggling from on to off and
+ * vice versa.
  *
  * @author Christian Hildebrandt
  */
@@ -37,7 +41,7 @@ public class LightSwitch implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long lightswitch_id;
 
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date toggleDate;
 
     @Enumerated(EnumType.STRING)
@@ -50,6 +54,7 @@ public class LightSwitch implements Serializable {
     public void setLightswitch_id(Long lightswitch_id) {
         this.lightswitch_id = lightswitch_id;
     }
+
     public Date getToggleDate() {
         return toggleDate;
     }
@@ -64,6 +69,29 @@ public class LightSwitch implements Serializable {
 
     public void setLightState(LightState lightState) {
         this.lightState = lightState;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 79 * hash + Objects.hashCode(this.lightswitch_id);
+        hash = 79 * hash + Objects.hashCode(this.toggleDate);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final LightSwitch other = (LightSwitch) obj;
+        if (!Objects.equals(this.toggleDate, other.toggleDate)) {
+            return false;
+        }
+        return this.lightState == other.lightState;
     }
 
 }

@@ -17,8 +17,10 @@ package com.amazon.sample.lightbulb.beans;
 
 import com.amazon.sample.lightbulb.exception.DatabaseException;
 import com.amazon.sample.lightbulb.model.LightState;
+import com.amazon.sample.lightbulb.model.LightSwitch;
 import com.amazon.sample.lightbulb.service.IBusinessService;
 import com.amazon.sample.lightbulb.service.impl.BusinessService;
+import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -35,45 +37,54 @@ public class ViewBulbBean {
 
     private LightState currentState;
 
+    /**
+     * Standard constructor
+     */
+    public ViewBulbBean() {
+    }
+
+    /**
+     * Get the current bulb light state from a service
+     *
+     * @return LightState on or off 
+     * @throws DatabaseException propagated Exception from service call
+     */
     public LightState getCurrentState() throws DatabaseException {
-        currentState = businessService.getLastLightState();
+
+        if (currentState == null) {
+            currentState = businessService.getLastLightState();
+        }
         return currentState;
     }
 
-    public void setCurrentState(LightState currentState) {
-        this.currentState = currentState;
+    /**
+     * Toggle light state when bulb is clicked
+     * 
+     * @return null to stay on page and perform a reload
+     * @throws DatabaseException propagated Exception from service call
+     */
+    public String toggleLight() throws DatabaseException {
+        currentState = businessService.toggleLight(currentState);
+        return null;
     }
 
-//    public String toggleLight() {
-//        try {
-//            if (loginService.isAuthorized(username, password)) {
-//                loggedIn = true;
-//                loginFailed = false;
-//                return "Employee/users.xhtml";
-//            } else {
-//                loggedIn = false;
-//                loginFailed = true;
-//            }
-//        } catch (UserNotFoundException ex) {
-//            Logger.getLogger(LoginBean.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
-//            FacesMessage fm;
-//            FacesContext facesContext = FacesContext.getCurrentInstance();
-//            fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, ex.getMessage(), null);
-//            facesContext.addMessage(null, fm);
-//        }
-//        return null;
-////        return "Employee/users.xhtml";
-//    }
-//    private void addErrorMessage(String msg, String clientId) {
-//        String codingErrorMsgKey = "coding_error_msg";
-//        FacesMessage fm;
-//        FacesContext facesContext = FacesContext.getCurrentInstance();
-//        if (StringUtils.isEmpty(msg)) {
-//            ResourceBundle bundle = facesContext.getApplication().getResourceBundle(facesContext, "bundle");
-//            fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, bundle.getString(codingErrorMsgKey), bundle.getString(codingErrorMsgKey));
-//        } else {
-//            fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, msg);
-//        }
-//        facesContext.addMessage(clientId, fm);
-//    }
+    /**
+     * Choose a bulb image depending on current light state
+     *
+     * @return String name of the image
+     * @throws DatabaseException propagated Exception from service call
+     */
+    public String getBulbImage() throws DatabaseException {
+        return getCurrentState().equals(LightState.OFF) ? "lightbulb_off.png" : "lightbulb_on.png";
+    }
+
+    /**
+     * Get all bulb switches from a service
+     * 
+     * @return List with all performed light switches
+     * @throws DatabaseException propagated Exception from service call
+     */
+    public List<LightSwitch> getSwitchesSortedByNewest() throws DatabaseException {
+        return businessService.getSwitchesSortedByNewest();
+    }
 }

@@ -16,17 +16,30 @@
 package com.amazon.sample.lightbulb.literal;
 
 /**
+ * Application based constants for use in any class of the application
  *
  * @author Christian Hildebrandt
  */
 public class Constants {
+
+    /**
+     * Databse based constants
+     */
     public static class Database {
 
         public static String PERSISTENCE_UNIT = "AmazonSampleDB";
 
+        /**
+         * Named queries
+         */
         public static class NamedQueries {
 
             public static String GET_ALL_SWITCHES = "SELECT s FROM LightSwitch s";
+
+            public static String GET_ALL_SWITCHES_SORT_BY_DATE_DESC = "SELECT s FROM LightSwitch s ORDER BY s.toggleDate DESC";
+
+            public static String GET_LAST_SWITCH = "SELECT s FROM LightSwitch s WHERE s.toggleDate = (SELECT MAX(ls.toggleDate) FROM LightSwitch ls)";
+
         }
 
     }

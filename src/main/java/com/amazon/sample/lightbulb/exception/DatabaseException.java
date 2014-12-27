@@ -16,6 +16,7 @@
 package com.amazon.sample.lightbulb.exception;
 
 /**
+ * Database Exception class to handle database errors
  *
  * @author Christian Hildebrandt
  */
@@ -23,6 +24,11 @@ public class DatabaseException extends Exception {
 
     private final String message;
 
+    /**
+     * Database Exception class to handle database errors
+     *
+     * @param message detail string to describe the cause
+     */
     public DatabaseException(String message) {
         this.message = message;
     }

@@ -20,17 +20,19 @@ import com.amazon.sample.lightbulb.jpa.dao.ILightSwitchDao;
 import com.amazon.sample.lightbulb.literal.Constants;
 import com.amazon.sample.lightbulb.model.LightSwitch;
 import java.util.List;
-import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import org.h2.engine.User;
 
 /**
  *
  * @author Christian Hildebrandt
  */
-public class LightSwitchDao extends BaseDao implements ILightSwitchDao{
+public class LightSwitchDao extends BaseDao implements ILightSwitchDao {
 
+    /**
+     *
+     * @param lightswitch
+     */
     @Override
     public void addSwitch(LightSwitch lightswitch) {
         super.create(lightswitch);
@@ -44,7 +46,24 @@ public class LightSwitchDao extends BaseDao implements ILightSwitchDao{
         em.close();
         return allSwitches;
     }
-    
+
+    @Override
+    public List<LightSwitch> getLastLightSwitch() throws DatabaseException {
+        EntityManager em = getEntityManager();
+        Query query = em.createQuery(Constants.Database.NamedQueries.GET_LAST_SWITCH, LightSwitch.class);
+        List<LightSwitch> lastSwitches = query.getResultList();
+        em.close();
+        return lastSwitches;
+    }
+
+    @Override
+    public List<LightSwitch> getSwitchesSortedByNewest() throws DatabaseException {
+        EntityManager em = getEntityManager();
+        Query query = em.createQuery(Constants.Database.NamedQueries.GET_ALL_SWITCHES_SORT_BY_DATE_DESC, LightSwitch.class);
+        List<LightSwitch> lastSwitches = query.getResultList();
+        em.close();
+        return lastSwitches;
+    }
     
     
 }

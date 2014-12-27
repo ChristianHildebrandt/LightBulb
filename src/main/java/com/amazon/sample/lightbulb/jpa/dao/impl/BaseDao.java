@@ -21,19 +21,36 @@ import javax.persistence.EntityManagerFactory;
 import org.jboss.logging.Logger;
 
 /**
+ * BaseDao class provides several data access methods for use in specialized
+ * data access objects
  *
  * @author Christian Hildebrandt
  */
 public class BaseDao {
-    
+
+    /**
+     * Logger for logging error, debug or normal logs
+     */
     protected static final Logger LOG = Logger.getLogger(BaseDao.class.getName());
 
     private static final EntityManagerFactory emf = javax.persistence.Persistence.createEntityManagerFactory(Constants.Database.PERSISTENCE_UNIT);
 
+    /**
+     * Gets an Entitymanager from the static EntityManagerFactory. This method
+     * can be used of any extending class.
+     *
+     * @return EntityManager for database queries
+     */
     protected EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
 
+    /**
+     * Creates a given entity in the database
+     *
+     * @param object Entity that should be saved
+     * @return The same object after adding it to database
+     */
     protected Object create(Object object) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
@@ -50,6 +67,12 @@ public class BaseDao {
         return object;
     }
 
+    /**
+     * Reads an Entity from databse
+     *
+     * @param object Objects that has to be read
+     * @return Read object
+     */
     public Object read(Object object) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
@@ -65,6 +88,11 @@ public class BaseDao {
         return result;
     }
 
+    /**
+     * Updates an entity in the databse
+     *
+     * @param object Object that has to be updated
+     */
     protected void update(Object object) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
@@ -79,6 +107,11 @@ public class BaseDao {
         }
     }
 
+    /**
+     * Deletes an entity from the database
+     *
+     * @param object Object that has to be deleted
+     */
     protected void delete(Object object) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
@@ -92,5 +125,5 @@ public class BaseDao {
             em.close();
         }
     }
-    
+
 }

@@ -23,11 +23,9 @@ import com.amazon.sample.lightbulb.model.LightSwitch;
 import com.amazon.sample.lightbulb.service.IBusinessService;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Set;
 import org.jboss.logging.Logger;
 
 /**
- *
  * @author Christian Hildebrandt
  */
 public class BusinessService implements IBusinessService {
@@ -41,6 +39,11 @@ public class BusinessService implements IBusinessService {
         lightSwitchDao = new LightSwitchDao();
     }
 
+    /**
+     * Synchronized Method to instantiate a single BusinessService.
+     *
+     * @return Single BusinessService
+     */
     public static synchronized BusinessService getInstance() {
         if (instance == null) {
             instance = new BusinessService();
@@ -58,9 +61,9 @@ public class BusinessService implements IBusinessService {
     @Override
     public LightState getLastLightState() throws DatabaseException {
         LightState newState = LightState.OFF;
-        List<LightSwitch> allSwitches = getAllSwitches();
-        if (!allSwitches.isEmpty()) {
-            newState = getLastSwitch(allSwitches).getLightState();
+        List<LightSwitch> lastSwitch = lightSwitchDao.getLastLightSwitch();
+        if (!lastSwitch.isEmpty()) {
+            newState = lastSwitch.get(lastSwitch.size() - 1).getLightState();
         }
         return newState;
     }
@@ -78,13 +81,8 @@ public class BusinessService implements IBusinessService {
         lightSwitchDao.addSwitch(newSwitch);
     }
 
-    private LightSwitch getLastSwitch(List<LightSwitch> allSwitches) {
-        LightSwitch newestSwitch = null;
-        for (LightSwitch lightSwitch : allSwitches) {
-            if (newestSwitch == null || newestSwitch.getToggleDate().compareTo(lightSwitch.getToggleDate()) > 0) {
-                newestSwitch = lightSwitch;
-            }
-        }
-        return newestSwitch;
+    @Override
+    public List<LightSwitch> getSwitchesSortedByNewest() throws DatabaseException {
+        return lightSwitchDao.getSwitchesSortedByNewest();
     }
 }

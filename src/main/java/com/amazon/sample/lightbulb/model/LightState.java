@@ -16,10 +16,12 @@
 package com.amazon.sample.lightbulb.model;
 
 /**
+ * The LightState enumeration provides the two states a light bulb can have - on and off
  *
  * @author Christian Hildebrandt
  */
 public enum LightState {
 
-    ON, OFF;
+    ON,
+    OFF;
 }
